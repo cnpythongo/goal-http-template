@@ -1,4 +1,4 @@
-IMAGE_NAME = goal-helper
+IMAGE_NAME = goal-app
 TEST_CONTAINER_NAME = goal-test
 
 build:
