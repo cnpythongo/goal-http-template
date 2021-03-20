@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func JsonResp(c *gin.Context, code int, result interface{}, extends map[string]interface{}) {
+func JsonResp(c *gin.Context, code int, result interface{}, extends interface{}) {
 	statusCode := http.StatusOK
 
 	if code != common.SuccessCode {
@@ -21,14 +21,23 @@ func JsonResp(c *gin.Context, code int, result interface{}, extends map[string]i
 			"result": result,
 		}
 		if extends != nil {
-			for key := range extends {
-				jsonData[key] = extends[key]
+			ex := extends.(map[string]interface{})
+			for key := range ex {
+				jsonData[key] = ex[key]
 			}
 		}
 		c.JSON(statusCode, jsonData)
 	}
 }
 
+func SuccessJsonResp(c *gin.Context, result interface{}, extends map[string]interface{}) {
+	JsonResp(c, common.SuccessCode, result, extends)
+}
+
+func FailJsonResp(c *gin.Context, message string) {
+	JsonResp(c, common.FailCode, message, nil)
+}
+
 func Ping(c *gin.Context) {
-	JsonResp(c, common.SuccessCode, map[string]string{"message": "pong"}, nil)
+	SuccessJsonResp(c, "pong", map[string]interface{}{"go": "good"})
 }
