@@ -15,8 +15,14 @@ func main() {
 	}
 	host := os.Getenv("HOST")
 	port := os.Getenv("PORT")
+	address := fmt.Sprintf("%s:%s", host, port)
+	config.GlobalLogger.Info(fmt.Sprintf("Server: %s", address))
+
 	route := gin.New()
-	route = router.SetupRouters(route)
-	addr := fmt.Sprintf("%s:%s", host, port)
-	route.Run(addr)
+	router.SetupRouters(route)
+	server := router.GetDefaultHttpServer(address, route)
+	err := server.ListenAndServe()
+	if err != nil {
+		panic(err)
+	}
 }

@@ -3,17 +3,20 @@ package common
 import "os"
 
 const (
-	SuccessCode  = 0
-	UnknownError = 10000
+	SuccessCode  = 1000
+	FailCode     = 1001
+	UnknownError = 1
 )
 
 var EnglishMsg = map[int]string{
 	SuccessCode:  "ok",
+	FailCode:     "failed",
 	UnknownError: "unknown error",
 }
 
 var ChinesMsg = map[int]string{
 	SuccessCode:  "ok",
+	FailCode:     "操作失败",
 	UnknownError: "未知错误",
 }
 

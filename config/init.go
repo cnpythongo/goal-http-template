@@ -9,17 +9,25 @@ import (
 	"gorm.io/gorm"
 	"os"
 	"strconv"
+	"time"
 )
 
 var Debug bool
-var GoalLogger *logrus.Logger
-var GoalDB *gorm.DB
-var GoalRedis *redis.Client
+var GlobalLogger *logrus.Logger
+var GlobalDB *gorm.DB
+var GlobalRedis *redis.Client
 
 func init() {
-	err := godotenv.Load()
+	// APP_RUN_ENV 系统环境变量，dev：开发环境, test: 测试环境，pro: 生产环境
+	runEnv := os.Getenv("APP_RUN_ENV")
+	if runEnv == "" || (runEnv != "dev" && runEnv != "test" && runEnv != "pro") {
+		panic("APP_RUN_ENV value error !!!!!!!!")
+	}
+	envFileName := fmt.Sprintf(".env.%s", runEnv)
+	err := godotenv.Load(envFileName)
 	if err != nil {
-		err := godotenv.Load("../.env")
+		envFileName = fmt.Sprintf("../.env.%s", runEnv)
+		err := godotenv.Load(envFileName)
 		if err != nil {
 			panic("Load .env file error >>> " + err.Error())
 		}
@@ -30,13 +38,14 @@ func init() {
 	initLogger()
 	initDBConn()
 	initRedis()
+	migrateTables()
 }
 
 func initLogger() {
 	// logger setting
-	GoalLogger = logrus.New()
-	GoalLogger.SetLevel(logrus.DebugLevel)
-	GoalLogger.Infoln("%d \n", GoalLogger.Level)
+	GlobalLogger = logrus.New()
+	GlobalLogger.SetLevel(logrus.DebugLevel)
+	GlobalLogger.Infoln(fmt.Sprintf("GlobalLogger.Level == %d \n", GlobalLogger.Level))
 }
 
 func initDBConn() {
@@ -48,12 +57,20 @@ func initDBConn() {
 		os.Getenv("DB_PORT"),
 		os.Getenv("DB_NAME"),
 	)
-	fmt.Println(dsn)
+	GlobalLogger.Infoln(dsn)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("database connection init error >>> " + err.Error())
 	}
-	GoalDB = db
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic("database sql db instance init error >>> " + err.Error())
+	}
+	sqlDB.SetMaxIdleConns(10)
+	sqlDB.SetMaxOpenConns(100)
+	sqlDB.SetConnMaxLifetime(time.Minute * 30)
+
+	GlobalDB = db
 }
 
 func initRedis() {
@@ -73,5 +90,5 @@ func initRedis() {
 	if pwd != "" {
 		options.Password = pwd
 	}
-	GoalRedis = redis.NewClient(options)
+	GlobalRedis = redis.NewClient(options)
 }

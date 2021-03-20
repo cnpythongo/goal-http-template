@@ -1,5 +1,5 @@
-IMAGE_NAME = goal-app
-TEST_CONTAINER_NAME = goal-test
+IMAGE_NAME = dego-ino-backend
+TEST_CONTAINER_NAME = dego-ino-backend-test
 
 build:
 	docker build -t $(IMAGE_NAME) .
