@@ -6,11 +6,11 @@ import (
 	"gorm.io/gorm"
 	"strings"
 
-	"github.com/cnpythongo/goal/apps/base"
+	"github.com/cnpythongo/goal/pkg/basic"
 )
 
 type User struct {
-	base.BaseModel
+	basic.BaseModel
 	Uuid        string       `json:"uuid" gorm:"column:uuid;type:varchar(64);not null;unique;comment:唯一ID"`
 	Username    string       `json:"username" gorm:"column:username;type:varchar(256);unique;not null;comment:'用户名'"`
 	Password    string       `json:"password" gorm:"column:password;type:varchar(200);not null;comment:'密码'"`

@@ -1,9 +1,9 @@
 package model
 
-import "github.com/cnpythongo/goal/apps/base"
+import "github.com/cnpythongo/goal/pkg/basic"
 
 type LoginHistory struct {
-	base.BaseModel
+	basic.BaseModel
 	UserID int `gorm:"index:loginhistory_user_id;column:user_id;type:int(11);not null"` // 用户ID
 }
 

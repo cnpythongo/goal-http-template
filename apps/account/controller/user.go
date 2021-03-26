@@ -3,7 +3,7 @@ package controller
 import (
 	"github.com/cnpythongo/goal/apps/account/model"
 	"github.com/cnpythongo/goal/apps/account/service"
-	"github.com/cnpythongo/goal/apps/base"
+	"github.com/cnpythongo/goal/pkg/response"
 	"github.com/gin-gonic/gin"
 )
 
@@ -26,7 +26,7 @@ func (u *UserController) CreateUser(c *gin.Context) {
 	var payload model.User
 	err := c.ShouldBindJSON(&payload)
 	if err != nil {
-		base.FailJsonResp(c, "提交表单数据不正确")
+		response.FailJsonResp(c, "提交表单数据不正确")
 		return
 	}
 }

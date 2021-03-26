@@ -1,7 +1,6 @@
-package base
+package response
 
 import (
-	"github.com/cnpythongo/goal/pkg/response"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -9,7 +8,7 @@ import (
 func JsonResp(c *gin.Context, code int, result interface{}, extends interface{}) {
 	statusCode := http.StatusOK
 
-	if code != response.SuccessCode {
+	if code != SuccessCode {
 		c.JSON(statusCode, gin.H{
 			"code": code,
 			"msg":  result.(string),
@@ -17,7 +16,7 @@ func JsonResp(c *gin.Context, code int, result interface{}, extends interface{})
 	} else {
 		jsonData := gin.H{
 			"code":   code,
-			"msg":    response.GetCodeMsg(code),
+			"msg":    GetCodeMsg(code),
 			"result": result,
 		}
 		if extends != nil {
@@ -31,13 +30,9 @@ func JsonResp(c *gin.Context, code int, result interface{}, extends interface{})
 }
 
 func SuccessJsonResp(c *gin.Context, result interface{}, extends map[string]interface{}) {
-	JsonResp(c, response.SuccessCode, result, extends)
+	JsonResp(c, SuccessCode, result, extends)
 }
 
 func FailJsonResp(c *gin.Context, message string) {
-	JsonResp(c, response.FailCode, message, nil)
-}
-
-func Ping(c *gin.Context) {
-	SuccessJsonResp(c, "pong", map[string]interface{}{"go": "good"})
+	JsonResp(c, FailCode, message, nil)
 }
