@@ -1,4 +1,4 @@
-package common
+package response
 
 import "os"
 
@@ -8,21 +8,9 @@ const (
 	UnknownError = 1
 )
 
-var EnglishMsg = map[int]string{
-	SuccessCode:  "ok",
-	FailCode:     "failed",
-	UnknownError: "unknown error",
-}
-
-var ChinesMsg = map[int]string{
-	SuccessCode:  "ok",
-	FailCode:     "操作失败",
-	UnknownError: "未知错误",
-}
-
 var MsgMapping = map[string]map[int]string{
-	"en":    EnglishMsg,
-	"zh_cn": ChinesMsg,
+	"en":    MessageEn,
+	"zh_cn": MessageZHCN,
 }
 
 var Language = os.Getenv("LANGUAGE")
