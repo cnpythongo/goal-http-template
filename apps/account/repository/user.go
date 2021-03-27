@@ -23,11 +23,24 @@ type UserRepository struct {
 }
 
 func (u *UserRepository) CreateUser(user *model.User) (*model.User, error) {
-	panic("implement me")
+	err := u.DB.Debug().Create(user).Error
+	if err != nil {
+		u.Logger.Errorf("apps.account.UserRepository.CreateUser Error ==> ", err)
+		return nil, err
+	}
+	return user, nil
 }
 
 func (u *UserRepository) GetUserByUuid(uuid string) (*model.User, error) {
-	panic("implement me")
+	result := model.NewUser()
+	err := u.DB.Debug().Where("uuid = ?", uuid).First(result).Error
+	if err != nil {
+		if err != gorm.ErrRecordNotFound {
+			u.Logger.Errorf("apps.account.UserRepository.GetUserByUuid Error ==> ", err)
+		}
+		return nil, err
+	}
+	return result, nil
 }
 
 func (u *UserRepository) GetUserQueryset(page, size int, conditions interface{}) ([]*model.User, error) {
@@ -45,7 +58,9 @@ func (u *UserRepository) GetUserById(userID int) (*model.User, error) {
 	result := model.NewUser()
 	err := u.DB.Debug().First(&result, userID).Error
 	if err != nil {
-		u.Logger.Errorf("apps.account.UserRepository.GetUserById Error ==> ", err)
+		if err == gorm.ErrRecordNotFound {
+			u.Logger.Errorf("apps.account.UserRepository.GetUserById Error ==> ", err)
+		}
 		return nil, err
 	}
 	return result, nil

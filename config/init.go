@@ -20,13 +20,13 @@ var GlobalRedis *redis.Client
 func init() {
 	// APP_RUN_ENV 系统环境变量，dev：开发环境, test: 测试环境，pro: 生产环境
 	runEnv := os.Getenv("APP_RUN_ENV")
-	if runEnv == "" || (runEnv != "dev" && runEnv != "test" && runEnv != "pro") {
-		panic("APP_RUN_ENV value error !!!!!!!!")
+	if runEnv == "" {
+		runEnv = "dev"
 	}
 	envFileName := fmt.Sprintf(".env.%s", runEnv)
 	err := godotenv.Load(envFileName)
 	if err != nil {
-		envFileName = fmt.Sprintf("../.env.%s", runEnv)
+		envFileName = fmt.Sprintf("../../../.env.%s", runEnv)
 		err := godotenv.Load(envFileName)
 		if err != nil {
 			panic("Load .env file error >>> " + err.Error())

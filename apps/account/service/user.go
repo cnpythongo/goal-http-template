@@ -21,7 +21,11 @@ type UserService struct {
 }
 
 func (u *UserService) CreateUser(user *model.User) (*model.User, error) {
-	panic("implement me")
+	result, err := u.UserRepo.CreateUser(user)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }
 
 func (u *UserService) GetUserById(id int) (*model.User, error) {
@@ -29,7 +33,11 @@ func (u *UserService) GetUserById(id int) (*model.User, error) {
 }
 
 func (u *UserService) GetUserByUuid(uuid string) (*model.User, error) {
-	panic("implement me")
+	result, err := u.UserRepo.GetUserByUuid(uuid)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }
 
 func (u *UserService) GetUserQueryset(page, size int, conditions interface{}) ([]*model.User, error) {

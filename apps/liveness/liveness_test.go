@@ -21,30 +21,3 @@ func TestPing(t *testing.T) {
 	assert.Equal(t, ok, true)
 	assert.Equal(t, result, float64(1000))
 }
-
-//func TestCreateProject(t *testing.T) {
-//	payload := &ino.ProjectPayload{
-//		AuthSignature: "0x4b9eE53b17bCa029FE2Bb2A9aE13321ba",
-//		Email:         "aaa@qq.com",
-//		Logo:          "https://aaaa.jpg",
-//		Name:          "币升项目",
-//		Desc:          "币升项目币升项目币升项目币升项目的简介",
-//		ContractType:  "ETH",
-//		ContractAddr:  "xxxsdfsdfsdfsdf",
-//		WebSite:       "https://gogog.com",
-//		WhitePaper:    "https://sdfsdfsd.com",
-//		Twitter:       "sdfsdf@fads.com",
-//		Telegram:      "xxcsdfsdf",
-//		Discord:       "dfsdfsdf",
-//	}
-//	r := gin.New()
-//	r = router.SetupRouters(r)
-//	w := DoRequest(r, "POST", "/api/ino/projects", payload)
-//	assert.Equal(t, http.StatusOK, w.Code)
-//
-//	response := ParseResponseToJSON(w)
-//	result, ok := response["code"]
-//	result = result.(float64)
-//	assert.Equal(t, ok, true)
-//	assert.Equal(t, result, float64(1000))
-//}

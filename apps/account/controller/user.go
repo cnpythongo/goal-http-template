@@ -1,10 +1,12 @@
 package controller
 
 import (
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
+	
 	"github.com/cnpythongo/goal/apps/account/model"
 	"github.com/cnpythongo/goal/apps/account/service"
 	"github.com/cnpythongo/goal/pkg/response"
-	"github.com/gin-gonic/gin"
 )
 
 type IUserController interface {
@@ -23,12 +25,18 @@ type UserController struct {
 }
 
 func (u *UserController) CreateUser(c *gin.Context) {
-	var payload model.User
-	err := c.ShouldBindJSON(&payload)
+	payload := model.NewUser()
+	err := c.ShouldBindJSON(payload)
 	if err != nil {
 		response.FailJsonResp(c, "提交表单数据不正确")
 		return
 	}
+	user, err := u.UserSvc.CreateUser(payload)
+	if err != nil {
+		response.FailJsonResp(c, "创建用户失败")
+		return
+	}
+	response.SuccessJsonResp(c, user, nil)
 }
 
 func (u *UserController) GetUserById(c *gin.Context) {
@@ -36,7 +44,17 @@ func (u *UserController) GetUserById(c *gin.Context) {
 }
 
 func (u *UserController) GetUserByUuid(c *gin.Context) {
-	panic("implement me")
+	uid := c.Param("uid")
+	result, err := u.UserSvc.GetUserByUuid(uid)
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			response.FailJsonResp(c, "用户不存在")
+		} else {
+			response.FailJsonResp(c, "查询用户失败")
+		}
+		return
+	}
+	response.SuccessJsonResp(c, result, nil)
 }
 
 func (u *UserController) GetUserList(c *gin.Context) {

@@ -14,6 +14,7 @@ require (
 	github.com/satori/go.uuid v1.2.0
 	github.com/sirupsen/logrus v1.7.0
 	github.com/ulule/deepcopier v0.0.0-20200430083143-45decc6639b6
+	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
 	gorm.io/driver/mysql v1.0.3
 	gorm.io/gorm v1.20.11
 )

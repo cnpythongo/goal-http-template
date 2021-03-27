@@ -1,9 +1,12 @@
 package router
 
 import (
+	"github.com/facebookgo/inject"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
+
+	"github.com/cnpythongo/goal/config"
 
 	"github.com/cnpythongo/goal/apps/account"
 	"github.com/cnpythongo/goal/apps/liveness"
@@ -21,8 +24,16 @@ func GetDefaultHttpServer(addr string, route *gin.Engine) *http.Server {
 }
 
 func SetupRouters(route *gin.Engine) *gin.Engine {
+	var injector inject.Graph
+	err := injector.Provide(
+		&inject.Object{Value: config.GlobalDB},
+		&inject.Object{Value: config.GlobalLogger},
+	)
+	if err != nil {
+		panic("inject fatal: " + err.Error())
+	}
 
-	userController := account.InjectUserController()
+	userController := account.InjectUserController(injector)
 
 	// middleware
 	route.Use(CORSMiddleware())
@@ -30,7 +41,7 @@ func SetupRouters(route *gin.Engine) *gin.Engine {
 	// ino project api
 	userGroup := route.Group("/api/users")
 	userGroup.POST("", userController.CreateUser)
-	userGroup.GET("/:uuid", userController.GetUserByUuid)
+	userGroup.GET("/:uid", userController.GetUserByUuid)
 
 	// common test api
 	apiGroup := route.Group("/api")
