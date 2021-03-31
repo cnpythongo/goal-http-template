@@ -22,9 +22,9 @@ func getRouter() *gin.Engine {
 
 func TestCreateUser(t *testing.T) {
 	payload := model.User{
-		Username: "lyh1",
+		Username: "lyh2",
 		Password: "123123",
-		Email:    "aaa@qq.com",
+		Email:    "aaabbb@qq.com",
 		Avatar:   "http://www.qq.com/aaa.jpg",
 	}
 	r := getRouter()
@@ -33,6 +33,7 @@ func TestCreateUser(t *testing.T) {
 
 	response := basic.ParseResponseToJSON(w)
 	result, ok := response["code"]
+	fmt.Printf("%v", response)
 	result = result.(float64)
 	assert.Equal(t, ok, true)
 	assert.Equal(t, result, float64(1000))
@@ -44,9 +45,9 @@ func TestGetUserByUuid(t *testing.T) {
 	w := basic.DoRequest(r, "GET", fmt.Sprintf("/api/users/%s", uid), nil)
 	assert.Equal(t, http.StatusOK, w.Code)
 	response := basic.ParseResponseToJSON(w)
+	fmt.Printf("%v", response)
 	result, ok := response["code"]
 	result = result.(float64)
 	assert.Equal(t, ok, true)
 	assert.Equal(t, result, float64(1000))
-	fmt.Printf("%v", response)
 }

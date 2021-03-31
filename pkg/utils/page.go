@@ -1,7 +1,7 @@
 package utils
 
 // 计算总页数
-func TotalPage(size, total int64) int64 {
+func TotalPage(size, total int) int {
 	if size == 0 {
 		return 0
 	}

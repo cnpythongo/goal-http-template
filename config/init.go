@@ -70,7 +70,11 @@ func initDBConn() {
 	sqlDB.SetMaxOpenConns(100)
 	sqlDB.SetConnMaxLifetime(time.Minute * 30)
 
-	GlobalDB = db
+	if Debug == true {
+		GlobalDB = db.Debug()
+	} else {
+		GlobalDB = db
+	}
 }
 
 func initRedis() {
