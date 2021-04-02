@@ -1,4 +1,4 @@
-package liveness
+package test
 
 import (
 	"github.com/gin-gonic/gin"

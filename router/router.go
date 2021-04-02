@@ -34,6 +34,7 @@ func SetupRouters(route *gin.Engine) *gin.Engine {
 	}
 
 	userController := account.InjectUserController(injector)
+	liveController := liveness.InjectLivenessController(injector)
 
 	// middleware
 	route.Use(CORSMiddleware())
@@ -45,6 +46,6 @@ func SetupRouters(route *gin.Engine) *gin.Engine {
 
 	// common test api
 	apiGroup := route.Group("/api")
-	apiGroup.GET("/ping", liveness.Ping)
+	apiGroup.GET("/ping", liveController.Ping)
 	return route
 }
