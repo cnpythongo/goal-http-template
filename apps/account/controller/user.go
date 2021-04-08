@@ -30,22 +30,22 @@ func (u *UserController) CreateUser(c *gin.Context) {
 	payload := model.NewUser()
 	err := c.ShouldBindJSON(payload)
 	if err != nil {
-		response.FailJsonResp(c, "提交表单数据不正确")
+		response.FailJsonResp(c, response.PayloadError, nil)
 		return
 	}
 	eu, _ := u.UserSvc.GetUserByUsername(payload.Username)
 	if eu != nil {
-		response.FailJsonResp(c, "用户名已存在，请换一个")
+		response.FailJsonResp(c, response.AccountUserExistError, nil)
 		return
 	}
 	ue, _ := u.UserSvc.GetUserByEmail(payload.Email)
 	if ue != nil {
-		response.FailJsonResp(c, "邮箱地址已存在，请换一个")
+		response.FailJsonResp(c, response.AccountEmailExistsError, nil)
 		return
 	}
 	user, err := u.UserSvc.CreateUser(payload)
 	if err != nil {
-		response.FailJsonResp(c, "创建用户失败")
+		response.FailJsonResp(c, response.AccountCreateError, nil)
 		return
 	}
 	response.SuccessJsonResp(c, user, nil)
@@ -55,15 +55,15 @@ func (u *UserController) GetUserById(c *gin.Context) {
 	pk := c.Param("id")
 	id, e := strconv.Atoi(pk)
 	if e != nil {
-		response.FailJsonResp(c, "用户id不正确")
+		response.FailJsonResp(c, response.AccountUserIdError, nil)
 		return
 	}
 	result, err := u.UserSvc.GetUserById(id)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
-			response.FailJsonResp(c, "用户不存在")
+			response.FailJsonResp(c, response.AccountUserNotExistError, nil)
 		} else {
-			response.FailJsonResp(c, "查询用户失败")
+			response.FailJsonResp(c, response.AccountQueryUserError, nil)
 		}
 		return
 	}
@@ -75,9 +75,9 @@ func (u *UserController) GetUserByUuid(c *gin.Context) {
 	result, err := u.UserSvc.GetUserByUuid(uid)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
-			response.FailJsonResp(c, "用户不存在")
+			response.FailJsonResp(c, response.AccountUserNotExistError, nil)
 		} else {
-			response.FailJsonResp(c, "查询用户失败")
+			response.FailJsonResp(c, response.AccountQueryUserError, nil)
 		}
 		return
 	}
@@ -89,7 +89,7 @@ func (u *UserController) GetUserList(c *gin.Context) {
 	var payload GetUserListPayload
 	err := c.ShouldBindQuery(&payload)
 	if err != nil {
-		response.FailJsonResp(c, "查询用户参数不正确")
+		response.FailJsonResp(c, response.AccountQueryUserParamError, nil)
 		return
 	}
 	page := payload.Page
@@ -97,7 +97,7 @@ func (u *UserController) GetUserList(c *gin.Context) {
 	// conditions := map[string]interface{}{}
 	result, total, err := u.UserSvc.GetUserQueryset(page, size, nil)
 	if err != nil {
-		response.FailJsonResp(c, "查询用户列表数据失败")
+		response.FailJsonResp(c, response.AccountQueryUserListError, nil)
 		return
 	}
 	response.SuccessJsonResp(c, result, map[string]interface{}{

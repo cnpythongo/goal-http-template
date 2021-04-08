@@ -5,34 +5,33 @@ import (
 	"net/http"
 )
 
-func JsonResp(c *gin.Context, code int, result interface{}, extends interface{}) {
+func jsonResp(c *gin.Context, code int, extends interface{}) {
 	statusCode := http.StatusOK
+	data := gin.H{
+		"code": code,
+		"msg":  GetCodeMsg(code),
+	}
+	if extends != nil {
+		ex := extends.(map[string]interface{})
+		for key := range ex {
+			data[key] = ex[key]
+		}
+	}
+	c.JSON(statusCode, data)
+}
 
-	if code != SuccessCode {
-		c.JSON(statusCode, gin.H{
-			"code": code,
-			"msg":  result.(string),
-		})
+func SuccessJsonResp(c *gin.Context, result interface{}, extends interface{}) {
+	if extends != nil {
+		ex := extends.(map[string]interface{})
+		ex["result"] = result
 	} else {
-		jsonData := gin.H{
-			"code":   code,
-			"msg":    GetCodeMsg(code),
+		extends = map[string]interface{}{
 			"result": result,
 		}
-		if extends != nil {
-			ex := extends.(map[string]interface{})
-			for key := range ex {
-				jsonData[key] = ex[key]
-			}
-		}
-		c.JSON(statusCode, jsonData)
 	}
+	jsonResp(c, SuccessCode, extends)
 }
 
-func SuccessJsonResp(c *gin.Context, result interface{}, extends map[string]interface{}) {
-	JsonResp(c, SuccessCode, result, extends)
-}
-
-func FailJsonResp(c *gin.Context, message string) {
-	JsonResp(c, FailCode, message, nil)
+func FailJsonResp(c *gin.Context, code int, extends interface{}) {
+	jsonResp(c, code, extends)
 }
