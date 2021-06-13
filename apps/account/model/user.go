@@ -1,13 +1,13 @@
 package model
 
 import (
+	"github.com/cnpythongo/goal-tools/utils"
 	uuid "github.com/satori/go.uuid"
 	"gorm.io/gorm"
 	"strings"
 	"time"
 
 	"github.com/cnpythongo/goal/pkg/basic"
-	"github.com/cnpythongo/goal/pkg/utils"
 )
 
 type User struct {

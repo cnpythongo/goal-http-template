@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/cnpythongo/goal/pkg/utils"
+	"github.com/cnpythongo/goal-tools/utils"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"strconv"
