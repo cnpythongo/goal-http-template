@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/cnpythongo/goal-tools/utils"
+	"github.com/cnpythongo/goal/config"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"strconv"
@@ -89,6 +90,7 @@ func (u *UserController) GetUserList(c *gin.Context) {
 	var payload GetUserListPayload
 	err := c.ShouldBindQuery(&payload)
 	if err != nil {
+		config.GlobalLogger.Error(err)
 		response.FailJsonResp(c, response.AccountQueryUserParamError, nil)
 		return
 	}

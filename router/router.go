@@ -40,7 +40,8 @@ func SetupRouters(route *gin.Engine) *gin.Engine {
 	route.Use(CORSMiddleware())
 
 	// ino project api
-	userGroup := route.Group("/api/users")
+	userGroup := route.Group("/api/account/users")
+	userGroup.GET("", userController.GetUserList)
 	userGroup.POST("", userController.CreateUser)
 	userGroup.GET("/:uid", userController.GetUserByUuid)
 
