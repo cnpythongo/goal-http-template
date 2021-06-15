@@ -1,6 +1,7 @@
 package router
 
 import (
+	"github.com/cnpythongo/goal/admin"
 	"github.com/facebookgo/inject"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -8,8 +9,8 @@ import (
 
 	"github.com/cnpythongo/goal/config"
 
-	"github.com/cnpythongo/goal/apps/account"
-	"github.com/cnpythongo/goal/apps/liveness"
+	"github.com/cnpythongo/goal/app"
+	"github.com/cnpythongo/goal/pkg/liveness"
 )
 
 func GetDefaultHttpServer(addr string, route *gin.Engine) *http.Server {
@@ -23,7 +24,7 @@ func GetDefaultHttpServer(addr string, route *gin.Engine) *http.Server {
 	}
 }
 
-func SetupRouters(route *gin.Engine) *gin.Engine {
+func InitAPIRouters(route *gin.Engine) *gin.Engine {
 	var injector inject.Graph
 	err := injector.Provide(
 		&inject.Object{Value: config.GlobalDB},
@@ -33,20 +34,45 @@ func SetupRouters(route *gin.Engine) *gin.Engine {
 		panic("inject fatal: " + err.Error())
 	}
 
-	userController := account.InjectUserController(injector)
+	userController := app.InjectUserController(injector)
+	liveController := liveness.InjectLivenessController(injector)
+
+	// middleware
+	route.Use(CORSMiddleware())
+	// common test api
+	apiGroup := route.Group("/api")
+	apiGroup.GET("/ping", liveController.Ping)
+	// api
+	userGroup := route.Group("/api/account")
+	userGroup.GET("/me", userController.GetUserByUuid)
+	userGroup.GET("/users/:uid", userController.GetUserByUuid)
+	return route
+}
+
+func InitAdminRouters(route *gin.Engine) *gin.Engine {
+	var injector inject.Graph
+	err := injector.Provide(
+		&inject.Object{Value: config.GlobalDB},
+		&inject.Object{Value: config.GlobalLogger},
+	)
+	if err != nil {
+		panic("inject fatal: " + err.Error())
+	}
+
+	userController := admin.InjectUserController(injector)
 	liveController := liveness.InjectLivenessController(injector)
 
 	// middleware
 	route.Use(CORSMiddleware())
 
-	// ino project api
-	userGroup := route.Group("/api/account/users")
-	userGroup.GET("", userController.GetUserList)
-	userGroup.POST("", userController.CreateUser)
-	userGroup.GET("/:uid", userController.GetUserByUuid)
-
 	// common test api
-	apiGroup := route.Group("/api")
+	apiGroup := route.Group("/api/admin")
 	apiGroup.GET("/ping", liveController.Ping)
+
+	// admin api
+	adminGroup := route.Group("/api/admin/account")
+	adminGroup.GET("/users", userController.GetUserList)
+	adminGroup.GET("/users/:uid", userController.GetUserByUuid)
+	adminGroup.POST("/users", userController.CreateUser)
 	return route
 }

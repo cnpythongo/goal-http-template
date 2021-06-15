@@ -19,7 +19,7 @@ func main() {
 	config.GlobalLogger.Info(fmt.Sprintf("Server: %s", address))
 
 	route := gin.New()
-	router.SetupRouters(route)
+	router.InitAPIRouters(route)
 	server := router.GetDefaultHttpServer(address, route)
 	err := server.ListenAndServe()
 	if err != nil {

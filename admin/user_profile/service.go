@@ -1,9 +1,6 @@
-package service
+package user_profile
 
-import (
-	"github.com/cnpythongo/goal/apps/account/model"
-	"github.com/cnpythongo/goal/apps/account/repository"
-)
+import "github.com/cnpythongo/goal/model"
 
 type IUserProfileService interface {
 	// 根据用户ID获取用户资料
@@ -11,7 +8,7 @@ type IUserProfileService interface {
 }
 
 type UserProfileService struct {
-	UserProfileRepo repository.IUserProfileRepository `inject:"UserProfileRepo"`
+	UserProfileRepo IUserProfileRepository `inject:"UserProfileRepo"`
 }
 
 func (u *UserProfileService) GetUserProfileObjectByUserId(userId int) (*model.UserProfile, error) {

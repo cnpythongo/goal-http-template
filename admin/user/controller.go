@@ -1,15 +1,13 @@
-package controller
+package user
 
 import (
 	"github.com/cnpythongo/goal-tools/utils"
 	"github.com/cnpythongo/goal/config"
+	"github.com/cnpythongo/goal/model"
+	"github.com/cnpythongo/goal/pkg/response"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"strconv"
-
-	"github.com/cnpythongo/goal/apps/account/model"
-	"github.com/cnpythongo/goal/apps/account/service"
-	"github.com/cnpythongo/goal/pkg/response"
 )
 
 type IUserController interface {
@@ -24,7 +22,7 @@ type IUserController interface {
 }
 
 type UserController struct {
-	UserSvc service.IUserService `inject:"UserSvc"`
+	UserSvc IUserService `inject:"UserSvc"`
 }
 
 func (u *UserController) CreateUser(c *gin.Context) {

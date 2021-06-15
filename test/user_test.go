@@ -2,6 +2,7 @@ package test
 
 import (
 	"fmt"
+	"github.com/cnpythongo/goal/account/user"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/assert/v2"
 	"net/http"
@@ -9,19 +10,18 @@ import (
 
 	_ "github.com/cnpythongo/goal/config"
 
-	"github.com/cnpythongo/goal/apps/account/model"
 	"github.com/cnpythongo/goal/pkg/basic"
 	"github.com/cnpythongo/goal/router"
 )
 
 func getRouter() *gin.Engine {
 	r := gin.New()
-	r = router.SetupRouters(r)
+	r = router.InitAPIRouters(r)
 	return r
 }
 
 func TestCreateUser(t *testing.T) {
-	payload := model.User{
+	payload := user.User{
 		Username: "lyh2",
 		Password: "123123",
 		Email:    "aaabbb@qq.com",

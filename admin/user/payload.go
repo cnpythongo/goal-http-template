@@ -1,4 +1,4 @@
-package controller
+package user
 
 // 查询用户结构体
 type GetUserListPayload struct {

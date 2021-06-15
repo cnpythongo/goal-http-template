@@ -1,7 +1,7 @@
-package repository
+package user
 
 import (
-	"github.com/cnpythongo/goal/apps/account/model"
+	"github.com/cnpythongo/goal/model"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )

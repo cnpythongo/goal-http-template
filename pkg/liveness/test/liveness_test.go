@@ -12,7 +12,7 @@ import (
 
 func TestPing(t *testing.T) {
 	r := gin.New()
-	r = router.SetupRouters(r)
+	r = router.InitAPIRouters(r)
 	w := basic.DoRequest(r, "GET", "/api/ping", nil)
 	assert.Equal(t, http.StatusOK, w.Code)
 	response := basic.ParseResponseToJSON(w)
