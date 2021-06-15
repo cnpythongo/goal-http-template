@@ -5,7 +5,7 @@ ENV GOPROXY https://goproxy.cn,direct
 ENV GOOS linux
 ENV GOARCH amd64
 ENV CGO_ENABLED 0
-RUN cd /app && go build -o dego-ino-app
+RUN cd /app && go build -o server
 
 
 FROM alpine
@@ -16,6 +16,6 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && apk del tzdata
 ENV APP_RUN_ENV pro
-COPY --from=build-env /app/dego-ino-app /app/dego-ino-app
+COPY --from=build-env /app/server /app/server
 COPY --from=build-env /app/.env.pro /app/.env.pro
-ENTRYPOINT ./dego-ino-app
+ENTRYPOINT ./server

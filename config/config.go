@@ -26,7 +26,7 @@ func init() {
 	envFileName := fmt.Sprintf(".env.%s", runEnv)
 	err := godotenv.Load(envFileName)
 	if err != nil {
-		envFileName = fmt.Sprintf("../../../.env.%s", runEnv)
+		envFileName = fmt.Sprintf("../../.env.%s", runEnv)
 		err := godotenv.Load(envFileName)
 		if err != nil {
 			panic("Load .env file error >>> " + err.Error())
