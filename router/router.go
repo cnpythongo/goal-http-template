@@ -66,11 +66,11 @@ func InitAdminRouters(route *gin.Engine) *gin.Engine {
 	route.Use(CORSMiddleware())
 
 	// common test api
-	apiGroup := route.Group("/api/admin")
+	apiGroup := route.Group("/api")
 	apiGroup.GET("/ping", liveController.Ping)
 
 	// admin api
-	adminGroup := route.Group("/api/admin/account")
+	adminGroup := route.Group("/api/account")
 	adminGroup.GET("/users", userController.GetUserList)
 	adminGroup.GET("/users/:uid", userController.GetUserByUuid)
 	adminGroup.POST("/users", userController.CreateUser)
