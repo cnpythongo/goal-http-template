@@ -85,7 +85,7 @@ func (u *UserController) GetUserByUuid(c *gin.Context) {
 
 // 获取用户列表
 func (u *UserController) GetUserList(c *gin.Context) {
-	var payload GetUserListPayload
+	var payload ReqGetUserListPayload
 	err := c.ShouldBindQuery(&payload)
 	if err != nil {
 		config.GlobalLogger.Error(err)

@@ -27,7 +27,7 @@ func (u *UserRepository) GetUserByCondition(condition interface{}) (*model.User,
 	err := u.DB.Where(condition).First(result).Error
 	if err != nil {
 		if err != gorm.ErrRecordNotFound {
-			u.Logger.Errorf("apps.account.UserRepository.GetUserByCondition Error ==> %v", err)
+			u.Logger.Errorf("app.user.UserRepository.GetUserByCondition Error ==> %v", err)
 			u.Logger.Infof("condition ==> %v", condition)
 		}
 		return nil, err

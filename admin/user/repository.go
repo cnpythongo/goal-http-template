@@ -33,7 +33,7 @@ func (u *UserRepository) GetUserByCondition(condition interface{}) (*model.User,
 	err := u.DB.Where(condition).First(result).Error
 	if err != nil {
 		if err != gorm.ErrRecordNotFound {
-			u.Logger.Errorf("apps.account.UserRepository.GetUserByCondition Error ==> %v", err)
+			u.Logger.Errorf("admin.user.UserRepository.GetUserByCondition Error ==> %v", err)
 			u.Logger.Infof("condition ==> %v", condition)
 		}
 		return nil, err
@@ -56,7 +56,7 @@ func (u *UserRepository) GetUserByEmail(email string) (*model.User, error) {
 func (u *UserRepository) CreateUser(user *model.User) (*model.User, error) {
 	err := u.DB.Create(user).Error
 	if err != nil {
-		u.Logger.Errorf("apps.account.UserRepository.CreateUser Error ==> %v", err)
+		u.Logger.Errorf("admin.user.UserRepository.CreateUser Error ==> %v", err)
 		return nil, err
 	}
 	return user, nil
@@ -80,13 +80,13 @@ func (u *UserRepository) GetUserQueryset(page, size int, conditions interface{})
 	var total int64
 	err := qs.Count(&total).Error
 	if err != nil {
-		u.Logger.Errorf("apps.account.UserRepository.GetUserQueryset Count Error ==> ", err)
+		u.Logger.Errorf("admin.user.UserRepository.GetUserQueryset Count Error ==> ", err)
 		return nil, 0, err
 	}
 	result := model.NewUsers()
 	err = qs.Find(&result).Error
 	if err != nil {
-		u.Logger.Errorf("apps.account.UserRepository.GetUserQueryset Query Error ==> ", err)
+		u.Logger.Errorf("admin.user.UserRepository.GetUserQueryset Query Error ==> ", err)
 		return nil, 0, err
 	}
 	return result, int(total), nil

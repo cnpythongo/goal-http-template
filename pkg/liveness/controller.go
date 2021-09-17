@@ -1,7 +1,9 @@
 package liveness
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"os"
 
 	"github.com/cnpythongo/goal/pkg/response"
 )
@@ -14,5 +16,5 @@ type LivenessController struct {
 }
 
 func (l *LivenessController) Ping(c *gin.Context) {
-	response.SuccessJsonResp(c, "ok", nil)
+	response.SuccessJsonResp(c, fmt.Sprintf("hello, %v", os.Getenv("APP_SERVICE")), nil)
 }

@@ -19,11 +19,11 @@ func (u *UserController) GetUserByUuid(c *gin.Context) {
 	uid := c.Param("uid")
 	result, err := u.UserSvc.GetUserByUuid(uid)
 	if err != nil {
+		code := response.AccountQueryUserError
 		if err == gorm.ErrRecordNotFound {
-			response.FailJsonResp(c, response.AccountUserNotExistError, nil)
-		} else {
-			response.FailJsonResp(c, response.AccountQueryUserError, nil)
+			code = response.AccountUserNotExistError
 		}
+		response.FailJsonResp(c, code, nil)
 		return
 	}
 	response.SuccessJsonResp(c, result, nil)

@@ -16,21 +16,28 @@ var Debug bool
 var GlobalLogger *logrus.Logger
 var GlobalDB *gorm.DB
 var GlobalRedis *redis.Client
+var GlobalEnvName string
 
 func init() {
-	// APP_RUN_ENV 系统环境变量，dev：开发环境, test: 测试环境，pro: 生产环境
-	runEnv := os.Getenv("APP_RUN_ENV")
-	if runEnv == "" {
-		runEnv = "dev"
+	// ENV_NAME env配置文件名称
+	GlobalEnvName = os.Getenv("ENV_NAME")
+	if GlobalEnvName == "" {
+		GlobalEnvName = ".env"
 	}
-	envFileName := fmt.Sprintf(".env.%s", runEnv)
+
+	envFileName := GlobalEnvName
+	// 跑测试用例时找不到配置文件,最多向上找20层目录
+	for i := 0; i < 20; i++ {
+		if _, err := os.Stat(envFileName); err == nil {
+			break
+		} else {
+			envFileName = "../" + envFileName
+		}
+	}
+
 	err := godotenv.Load(envFileName)
 	if err != nil {
-		envFileName = fmt.Sprintf("../../.env.%s", runEnv)
-		err := godotenv.Load(envFileName)
-		if err != nil {
-			panic("Load .env file error >>> " + err.Error())
-		}
+		panic("Load .env file error >>> " + err.Error())
 	}
 
 	Debug = os.Getenv("DEBUG") == "true"
@@ -38,7 +45,9 @@ func init() {
 	initLogger()
 	initDBConn()
 	initRedis()
-	migrateTables()
+	if Debug {
+		migrateTables()
+	}
 }
 
 func initLogger() {
