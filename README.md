@@ -35,19 +35,19 @@ $ ENV_NAME=.env;APP_SERVICE=api go run main.go
 $ ENV_NAME=.env;APP_SERVICE=admin go run main.go
 ```
 
-## Docker
+### Docker-compose快速启动
+
+```shell script
+$ docker-compose up -d 
+```
+
+
+## Docker分步操作
 
 ### 生成Image
 
-生成前台API服务镜像
 ```shell script
-$ make build-api
-```
-
-生成后台API服务镜像
-
-```shell script
-$ make build-admin
+$ make build
 ```
 
 ### 运行Docker容器
