@@ -10,8 +10,8 @@ import (
 	_ "github.com/cnpythongo/goal/config"
 
 	"github.com/cnpythongo/goal/model"
-	"github.com/cnpythongo/goal/pkg/basic"
 	"github.com/cnpythongo/goal/router"
+	"github.com/cnpythongo/goal/test/utils"
 )
 
 func getRouter() *gin.Engine {
@@ -28,10 +28,10 @@ func TestCreateUser(t *testing.T) {
 		Avatar:   "http://www.qq.com/aaa.jpg",
 	}
 	r := getRouter()
-	w := basic.DoRequest(r, "POST", "/api/account/users", payload)
+	w := utils.DoRequest(r, "POST", "/api/account/users", payload)
 	assert.Equal(t, http.StatusOK, w.Code)
 
-	response := basic.ParseResponseToJSON(w)
+	response := utils.ParseResponseToJSON(w)
 	result, ok := response["code"]
 	fmt.Printf("%v\n", response)
 	result = result.(float64)
@@ -42,9 +42,9 @@ func TestCreateUser(t *testing.T) {
 func TestGetUserByUuid(t *testing.T) {
 	r := getRouter()
 	uid := "3610b2e5ab0a43c6b909eece0cb1c167"
-	w := basic.DoRequest(r, "GET", fmt.Sprintf("/api/users/%s", uid), nil)
+	w := utils.DoRequest(r, "GET", fmt.Sprintf("/api/users/%s", uid), nil)
 	assert.Equal(t, http.StatusOK, w.Code)
-	response := basic.ParseResponseToJSON(w)
+	response := utils.ParseResponseToJSON(w)
 	fmt.Printf("%v\n", response)
 	result, ok := response["code"]
 	result = result.(float64)

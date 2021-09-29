@@ -22,7 +22,7 @@ func init() {
 	// ENV_NAME env配置文件名称
 	GlobalEnvName = os.Getenv("ENV_NAME")
 	if GlobalEnvName == "" {
-		GlobalEnvName = ".env"
+		GlobalEnvName = ".env.local"
 	}
 
 	envFileName := GlobalEnvName

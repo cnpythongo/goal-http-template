@@ -7,14 +7,15 @@ import (
 	"testing"
 
 	"github.com/cnpythongo/goal/router"
+	"github.com/cnpythongo/goal/test/utils"
 )
 
 func TestPing(t *testing.T) {
 	r := gin.New()
 	r = router.InitAPIRouters(r)
-	w := DoRequest(r, "GET", "/api/ping", nil)
+	w := utils.DoRequest(r, "GET", "/api/ping", nil)
 	assert.Equal(t, http.StatusOK, w.Code)
-	response := ParseResponseToJSON(w)
+	response := utils.ParseResponseToJSON(w)
 	result, ok := response["code"]
 	result = result.(float64)
 	assert.Equal(t, ok, true)
