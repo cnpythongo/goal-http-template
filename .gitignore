@@ -20,6 +20,6 @@ output/
 dist/
 .idea/
 .env
-.env.*
+.env.local
 runtime/*/
 goal

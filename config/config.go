@@ -16,16 +16,16 @@ var Debug bool
 var GlobalLogger *logrus.Logger
 var GlobalDB *gorm.DB
 var GlobalRedis *redis.Client
-var GlobalEnvName string
+var GlobalEnvFile string
 
 func init() {
-	// ENV_NAME env配置文件名称
-	GlobalEnvName = os.Getenv("ENV_NAME")
-	if GlobalEnvName == "" {
-		GlobalEnvName = ".env.local"
+	// GOAL_ENV_FILE env配置文件名称
+	GlobalEnvFile = os.Getenv("GOAL_ENV_FILE")
+	if GlobalEnvFile == "" {
+		GlobalEnvFile = ".env"
 	}
 
-	envFileName := GlobalEnvName
+	envFileName := GlobalEnvFile
 	// 跑测试用例时找不到配置文件,最多向上找20层目录
 	for i := 0; i < 20; i++ {
 		if _, err := os.Stat(envFileName); err == nil {

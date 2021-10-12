@@ -38,8 +38,8 @@ services:
     volumes:
       - "./runtime/logs/api:/app/log"
     environment:
-      ENV_NAME: ".env"
-      APP_SERVICE: "api"
+      GOAL_ENV_FILE: ".env"
+      GOAL_APP_SERVICE: "api"
     links:
       - goal_mysql
       - goal_redis
@@ -59,8 +59,8 @@ services:
     volumes:
       - "./runtime/logs/admin:/app/log"
     environment:
-      ENV_NAME: ".env"
-      APP_SERVICE: "admin"
+      GOAL_ENV_FILE: ".env"
+      GOAL_APP_SERVICE: "admin"
     links:
       - goal_mysql
       - goal_redis
