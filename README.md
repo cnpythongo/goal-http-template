@@ -17,7 +17,7 @@ HTTP API服务开发模板
 
 ## 本地开发准备工作：
 
-1. 按实际需要将 .env.template文件 或 .env.docker.template文件 复制为 .env 文件, 修改.env配置文件内的各项配置;
+1. 将 .env.template文件 复制为 .env 文件, 按实际需要修改.env文件内的各项配置;
 
 
 ## 运行本地开发服务:
