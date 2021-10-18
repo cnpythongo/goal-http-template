@@ -13,7 +13,7 @@ func main() {
 	if !config.Debug {
 		gin.SetMode(gin.ReleaseMode)
 	}
-	svc := os.Getenv("GOAL_APP_SERVICE")
+	svc := os.Getenv("APP_ROUTER_SERVICE")
 	host := os.Getenv("HOST")
 	port := os.Getenv("PORT")
 	address := fmt.Sprintf("%s:%s", host, port)

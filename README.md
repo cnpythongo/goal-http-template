@@ -9,12 +9,6 @@ HTTP API服务开发模板
 
 * GOAL_ENV_FILE: env配置文件名称, 如未指定, 则默认使用根目录 .env 文件
 
-* GOAL_APP_SERVICE: 服务的类型, 有两个值.
-
-    * admin 后台管理接口服务; 
-    * api 前台API接口服务
-
-
 ## 本地开发准备工作：
 
 1. 将 .env.template文件 复制为 .env 文件, 按实际需要修改.env文件内的各项配置;
@@ -26,13 +20,13 @@ HTTP API服务开发模板
 1. 启动前台API服务:
 
 ```shell script
-$ export GOAL_ENV_FILE=.env GOAL_APP_SERVICE=api && go run main.go
+$ export GOAL_ENV_FILE=.env && go run main.go
 ```
 
 2. 启动后台管理API服务:
 
 ```shell script
-$ export GOAL_ENV_FILE=.env GOAL_APP_SERVICE=admin && go run main.go
+$ export GOAL_ENV_FILE=.env && go run main.go
 ```
 
 ### Docker-compose快速启动

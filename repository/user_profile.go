@@ -1,4 +1,4 @@
-package user_profile
+package repository
 
 import (
 	"github.com/cnpythongo/goal/model"

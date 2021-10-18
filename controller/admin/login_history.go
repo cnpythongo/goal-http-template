@@ -1,6 +1,9 @@
-package login_history
+package admin
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/cnpythongo/goal/service"
+	"github.com/gin-gonic/gin"
+)
 
 type ILoginHistoryController interface {
 	GetLoginHistory(c *gin.Context)
@@ -9,7 +12,7 @@ type ILoginHistoryController interface {
 }
 
 type LoginHistoryController struct {
-	LoginHistorySvc ILoginHistoryService `inject:"LoginHistorySvc"`
+	LoginHistorySvc service.ILoginHistoryService `inject:"LoginHistorySvc"`
 }
 
 func (l *LoginHistoryController) GetLoginHistory(c *gin.Context) {

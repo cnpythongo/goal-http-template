@@ -1,6 +1,9 @@
-package login_history
+package service
 
-import "github.com/cnpythongo/goal/model"
+import (
+	"github.com/cnpythongo/goal/model"
+	"github.com/cnpythongo/goal/repository"
+)
 
 type ILoginHistoryService interface {
 	GetLoginHistoryObject(id int) (*model.LoginHistory, error)
@@ -9,7 +12,7 @@ type ILoginHistoryService interface {
 }
 
 type LoginHistoryService struct {
-	LoginHistoryRepo ILoginHistoryRepository `inject:"LoginHistoryRepo"`
+	LoginHistoryRepo repository.ILoginHistoryRepository `inject:"LoginHistoryRepo"`
 }
 
 func (l *LoginHistoryService) GetLoginHistoryObject(id int) (*model.LoginHistory, error) {

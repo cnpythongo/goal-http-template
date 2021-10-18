@@ -1,15 +1,14 @@
 package router
 
 import (
-	"github.com/cnpythongo/goal/admin"
 	"github.com/facebookgo/inject"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
 
 	"github.com/cnpythongo/goal/config"
-
-	"github.com/cnpythongo/goal/app"
+	"github.com/cnpythongo/goal/controller/admin"
+	"github.com/cnpythongo/goal/controller/api"
 	"github.com/cnpythongo/goal/pkg/liveness"
 )
 
@@ -34,7 +33,7 @@ func InitAPIRouters(route *gin.Engine) *gin.Engine {
 		panic("inject fatal: " + err.Error())
 	}
 
-	userController := app.InjectUserController(injector)
+	userController := api.InjectUserController(injector)
 	liveController := liveness.InjectLivenessController(injector)
 
 	// middleware

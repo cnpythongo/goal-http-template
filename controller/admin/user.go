@@ -1,14 +1,23 @@
-package user
+package admin
 
 import (
 	"github.com/cnpythongo/goal-tools/utils"
 	"github.com/cnpythongo/goal/config"
 	"github.com/cnpythongo/goal/model"
 	"github.com/cnpythongo/goal/pkg/response"
+	"github.com/cnpythongo/goal/service"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"strconv"
 )
+
+// 查询用户结构体
+type ReqGetUserListPayload struct {
+	Page             int    `json:"page" form:"page" binding:"required"`
+	Size             int    `json:"size" form:"size" binding:"required"`
+	LastLoginAtStart string `json:"last_login_at_start" form:"last_login_at_start"`
+	LastLoginAtEnd   string `json:"last_login_at_end" form:"last_login_at_end"`
+}
 
 type IUserController interface {
 	// 创建用户
@@ -22,7 +31,7 @@ type IUserController interface {
 }
 
 type UserController struct {
-	UserSvc IUserService `inject:"UserSvc"`
+	UserSvc service.IUserService `inject:"UserSvc"`
 }
 
 func (u *UserController) CreateUser(c *gin.Context) {

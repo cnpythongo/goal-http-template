@@ -1,9 +1,11 @@
-package user
+package api
 
 import (
-	"github.com/cnpythongo/goal/pkg/response"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+
+	"github.com/cnpythongo/goal/pkg/response"
+	"github.com/cnpythongo/goal/service"
 )
 
 type IUserController interface {
@@ -12,7 +14,7 @@ type IUserController interface {
 }
 
 type UserController struct {
-	UserSvc IUserService `inject:"UserSvc"`
+	UserSvc service.IUserService `inject:"UserSvc"`
 }
 
 func (u *UserController) GetUserByUuid(c *gin.Context) {

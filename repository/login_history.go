@@ -1,4 +1,4 @@
-package login_history
+package repository
 
 import (
 	"github.com/cnpythongo/goal/model"

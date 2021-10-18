@@ -16,5 +16,5 @@ type LivenessController struct {
 }
 
 func (l *LivenessController) Ping(c *gin.Context) {
-	response.SuccessJsonResp(c, fmt.Sprintf("hello, %v", os.Getenv("GOAL_APP_SERVICE")), nil)
+	response.SuccessJsonResp(c, fmt.Sprintf("hello, %v", os.Getenv("APP_ROUTER_SERVICE")), nil)
 }

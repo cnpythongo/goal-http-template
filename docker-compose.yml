@@ -39,7 +39,6 @@ services:
       - "./runtime/logs/api:/app/log"
     environment:
       GOAL_ENV_FILE: ".env"
-      GOAL_APP_SERVICE: "api"
     links:
       - goal_mysql
       - goal_redis
@@ -60,7 +59,6 @@ services:
       - "./runtime/logs/admin:/app/log"
     environment:
       GOAL_ENV_FILE: ".env"
-      GOAL_APP_SERVICE: "admin"
     links:
       - goal_mysql
       - goal_redis
