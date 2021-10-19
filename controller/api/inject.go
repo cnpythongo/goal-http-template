@@ -43,8 +43,8 @@ func InjectUserProfileController(injector inject.Graph) UserProfileController {
 func InjectLoginHistoryController(injector inject.Graph) LoginHistoryController {
 	var ctl LoginHistoryController
 	err := injector.Provide(
-		&inject.Object{Value: config.GlobalDB},
-		&inject.Object{Value: config.GlobalLogger},
+		&inject.Object{Value: config.GlobalConfig.DB},
+		&inject.Object{Value: config.GlobalConfig.Logger},
 		&inject.Object{Value: &repository.LoginHistoryRepository{}, Name: "LoginHistoryRepo"},
 		&inject.Object{Value: &service.LoginHistoryService{}, Name: "LoginHistorySvc"},
 		&inject.Object{Value: &ctl},

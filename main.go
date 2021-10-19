@@ -10,14 +10,14 @@ import (
 )
 
 func main() {
-	if !config.Debug {
+	if !config.GlobalConfig.Debug {
 		gin.SetMode(gin.ReleaseMode)
 	}
 	svc := os.Getenv("APP_ROUTER_SERVICE")
 	host := os.Getenv("HOST")
 	port := os.Getenv("PORT")
 	address := fmt.Sprintf("%s:%s", host, port)
-	config.GlobalLogger.Info(fmt.Sprintf("Server: %s", address))
+	config.GlobalConfig.Logger.Info(fmt.Sprintf("Server: %s", address))
 
 	route := gin.New()
 	if svc == "admin" {

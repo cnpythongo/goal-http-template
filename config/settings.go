@@ -14,20 +14,24 @@ import (
 	"time"
 )
 
-var Debug bool
-var GlobalLogger *logrus.Logger
-var GlobalDB *gorm.DB
-var GlobalRedis *redis.Client
-var GlobalEnvFile string
+type Config struct {
+	EnvFileName string
+	Debug       bool
+	Logger      *logrus.Logger
+	Redis       *redis.Client
+	DB          *gorm.DB
+}
+
+var GlobalConfig *Config
 
 func init() {
-	// GOAL_ENV_FILE env配置文件名称
-	GlobalEnvFile = os.Getenv("GOAL_ENV_FILE")
-	if GlobalEnvFile == "" {
-		GlobalEnvFile = ".env"
-	}
+	conf := &Config{}
 
-	envFileName := GlobalEnvFile
+	// GOAL_ENV_FILE env配置文件名称
+	envFileName := os.Getenv("GOAL_ENV_FILE")
+	if envFileName == "" {
+		envFileName = ".env"
+	}
 	// 跑测试用例时找不到配置文件,最多向上找20层目录
 	for i := 0; i < 20; i++ {
 		if _, err := os.Stat(envFileName); err == nil {
@@ -42,35 +46,37 @@ func init() {
 		panic("Load .env file error >>> " + err.Error())
 	}
 
-	Debug = os.Getenv("DEBUG") == "true"
+	conf.EnvFileName = envFileName
+	conf.Debug = os.Getenv("DEBUG") == "true"
 
-	initLogger()
-	initDBConn()
-	initRedis()
-	if Debug {
-		migrateTables()
+	initLogger(conf)
+	initDBConn(conf)
+	initRedis(conf)
+	GlobalConfig = conf
+
+	if conf.Debug {
+		migrateTables(conf)
 	}
 }
 
-func initLogger() {
+func initLogger(conf *Config) {
 	logDir := os.Getenv("LOG_DIR")
 
 	// logger setting
-	GlobalLogger = logrus.New()
-	if Debug {
-		GlobalLogger.SetLevel(logrus.DebugLevel)
+	conf.Logger = logrus.New()
+	if conf.Debug {
+		conf.Logger.SetLevel(logrus.DebugLevel)
 	}
-	GlobalLogger.Infoln(fmt.Sprintf("GlobalLogger.Level == %d \n", GlobalLogger.Level))
+	conf.Logger.Infoln(fmt.Sprintf("Global Config Logger.Level == %d \n", conf.Logger.Level))
 
 	logName := fmt.Sprintf("%s/%s.log", logDir, os.Getenv("GOAL_APP_SERVICE"))
 	rotaLogs, _ := rotatelogs.New(logName + ".%Y%m%d")
 	mw := io.MultiWriter(os.Stdout, rotaLogs)
-	GlobalLogger.SetOutput(mw)
-
-	GlobalLogger.SetFormatter(&logrus.JSONFormatter{})
+	conf.Logger.SetOutput(mw)
+	conf.Logger.SetFormatter(&logrus.JSONFormatter{})
 }
 
-func initDBConn() {
+func initDBConn(conf *Config) {
 	// db setting
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		os.Getenv("DB_USER"),
@@ -79,7 +85,8 @@ func initDBConn() {
 		os.Getenv("DB_PORT"),
 		os.Getenv("DB_NAME"),
 	)
-	GlobalLogger.Infoln(dsn)
+	conf.Logger.Infoln(dsn)
+
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("database connection init error >>> " + err.Error())
@@ -92,14 +99,14 @@ func initDBConn() {
 	sqlDB.SetMaxOpenConns(100)
 	sqlDB.SetConnMaxLifetime(time.Minute * 30)
 
-	if Debug == true {
-		GlobalDB = db.Debug()
+	if conf.Debug {
+		conf.DB = db.Debug()
 	} else {
-		GlobalDB = db
+		conf.DB = db
 	}
 }
 
-func initRedis() {
+func initRedis(conf *Config) {
 	if os.Getenv("ENABLE_REDIS") == "false" {
 		return
 	}
@@ -116,5 +123,8 @@ func initRedis() {
 	if pwd != "" {
 		options.Password = pwd
 	}
-	GlobalRedis = redis.NewClient(options)
+	conf.Redis = redis.NewClient(options)
+	if conf.Redis != nil {
+		conf.Redis.Set("GOAL_SERVICE_START_AT", time.Now().Unix(), 0)
+	}
 }

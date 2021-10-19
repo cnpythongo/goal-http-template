@@ -2,11 +2,11 @@ package admin
 
 import (
 	"github.com/cnpythongo/goal-tools/utils"
-	"github.com/cnpythongo/goal/config"
 	"github.com/cnpythongo/goal/model"
 	"github.com/cnpythongo/goal/pkg/response"
 	"github.com/cnpythongo/goal/service"
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"strconv"
 )
@@ -31,6 +31,7 @@ type IUserController interface {
 }
 
 type UserController struct {
+	Logger  *logrus.Logger       `inject:""`
 	UserSvc service.IUserService `inject:"UserSvc"`
 }
 
@@ -97,7 +98,7 @@ func (u *UserController) GetUserList(c *gin.Context) {
 	var payload ReqGetUserListPayload
 	err := c.ShouldBindQuery(&payload)
 	if err != nil {
-		config.GlobalLogger.Error(err)
+		u.Logger.Error(err)
 		response.FailJsonResp(c, response.AccountQueryUserParamError, nil)
 		return
 	}

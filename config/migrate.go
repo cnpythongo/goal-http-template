@@ -4,22 +4,22 @@ import (
 	"github.com/cnpythongo/goal/model"
 )
 
-func migrateTables() {
-	if !Debug { // 仅在开发模式执行migrate操作
+func migrateTables(conf *Config) {
+	if !GlobalConfig.Debug { // 仅在开发模式执行migrate操作
 		return
 	}
-	GlobalLogger.Infoln("migrate tables start .....")
-	err := GlobalDB.AutoMigrate(model.NewUser())
+	GlobalConfig.Logger.Infoln("migrate tables start .....")
+	err := GlobalConfig.DB.AutoMigrate(model.NewUser())
 	if err != nil {
 		panic(err)
 	}
-	err = GlobalDB.AutoMigrate(model.NewUserProfile())
+	err = GlobalConfig.DB.AutoMigrate(model.NewUserProfile())
 	if err != nil {
 		panic(err)
 	}
-	err = GlobalDB.AutoMigrate(model.NewLoginHistory())
+	err = GlobalConfig.DB.AutoMigrate(model.NewLoginHistory())
 	if err != nil {
 		panic(err)
 	}
-	GlobalLogger.Infoln("migrate tables success .....")
+	GlobalConfig.Logger.Infoln("migrate tables success .....")
 }

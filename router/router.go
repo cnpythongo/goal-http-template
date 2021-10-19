@@ -26,8 +26,8 @@ func GetDefaultHttpServer(addr string, route *gin.Engine) *http.Server {
 func InitAPIRouters(route *gin.Engine) *gin.Engine {
 	var injector inject.Graph
 	err := injector.Provide(
-		&inject.Object{Value: config.GlobalDB},
-		&inject.Object{Value: config.GlobalLogger},
+		&inject.Object{Value: config.GlobalConfig.DB},
+		&inject.Object{Value: config.GlobalConfig.Logger},
 	)
 	if err != nil {
 		panic("inject fatal: " + err.Error())
@@ -51,8 +51,8 @@ func InitAPIRouters(route *gin.Engine) *gin.Engine {
 func InitAdminRouters(route *gin.Engine) *gin.Engine {
 	var injector inject.Graph
 	err := injector.Provide(
-		&inject.Object{Value: config.GlobalDB},
-		&inject.Object{Value: config.GlobalLogger},
+		&inject.Object{Value: config.GlobalConfig.DB},
+		&inject.Object{Value: config.GlobalConfig.Logger},
 	)
 	if err != nil {
 		panic("inject fatal: " + err.Error())
