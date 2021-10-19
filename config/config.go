@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"github.com/go-redis/redis"
 	"github.com/joho/godotenv"
+	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	"github.com/sirupsen/logrus"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"io"
 	"os"
 	"strconv"
 	"time"
@@ -51,10 +53,21 @@ func init() {
 }
 
 func initLogger() {
+	logDir := os.Getenv("LOG_DIR")
+
 	// logger setting
 	GlobalLogger = logrus.New()
-	GlobalLogger.SetLevel(logrus.DebugLevel)
+	if Debug {
+		GlobalLogger.SetLevel(logrus.DebugLevel)
+	}
 	GlobalLogger.Infoln(fmt.Sprintf("GlobalLogger.Level == %d \n", GlobalLogger.Level))
+
+	logName := fmt.Sprintf("%s/%s.log", logDir, os.Getenv("GOAL_APP_SERVICE"))
+	rotaLogs, _ := rotatelogs.New(logName + ".%Y%m%d")
+	mw := io.MultiWriter(os.Stdout, rotaLogs)
+	GlobalLogger.SetOutput(mw)
+
+	GlobalLogger.SetFormatter(&logrus.JSONFormatter{})
 }
 
 func initDBConn() {
