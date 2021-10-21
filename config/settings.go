@@ -14,6 +14,8 @@ import (
 	"time"
 )
 
+const databaseParams = "?charset=utf8mb4&parseTime=True&loc=Local"
+
 type Config struct {
 	EnvFileName string
 	Debug       bool
@@ -76,15 +78,39 @@ func initLogger(conf *Config) {
 	conf.Logger.SetFormatter(&logrus.JSONFormatter{})
 }
 
-func initDBConn(conf *Config) {
-	// db setting
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+func getDatabaseDsn() string {
+	return fmt.Sprintf(
+		"%s:%s@tcp(%s:%s)/",
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
 		os.Getenv("DB_HOST"),
 		os.Getenv("DB_PORT"),
+	)
+}
+
+func initDatabase() {
+	dsn := fmt.Sprintf("%s%s", getDatabaseDsn(), databaseParams)
+	db, err := gorm.Open(mysql.Open(dsn), nil)
+	if err != nil {
+		panic("Connect Database error >>> " + err.Error())
+	}
+
+	createSQL := fmt.Sprintf(
+		"CREATE DATABASE IF NOT EXISTS `%s` CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_general_ci';",
 		os.Getenv("DB_NAME"),
 	)
+
+	err = db.Exec(createSQL).Error
+	if err != nil {
+		panic("Create Database error >>> " + err.Error())
+	}
+}
+
+func initDBConn(conf *Config) {
+	// init database
+	initDatabase()
+
+	dsn := fmt.Sprintf("%s%s%s", getDatabaseDsn(), os.Getenv("DB_NAME"), databaseParams)
 	conf.Logger.Infoln(dsn)
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
