@@ -3,10 +3,10 @@ package response
 import "os"
 
 const (
-	SuccessCode  = 1000
-	FailCode     = 1001
-	UnknownError = 1
+	SuccessCode = 0
+	FailCode    = 1
 
+	UnknownError = 1000
 	PayloadError = 1100
 
 	AccountUserExistError      = 2000

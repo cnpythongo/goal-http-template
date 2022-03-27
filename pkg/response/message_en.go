@@ -1,11 +1,11 @@
 package response
 
 var MessageEn = map[int]string{
-	SuccessCode:  "ok",
-	FailCode:     "failed",
-	UnknownError: "unknown error",
+	SuccessCode: "ok",
+	FailCode:    "fail",
 
-	PayloadError: "提交表单数据不正确",
+	UnknownError: "Unknown error",
+	PayloadError: "Post data error",
 
 	AccountUserExistError:      "用户名已存在，请换一个",
 	AccountEmailExistsError:    "邮箱地址已存在，请换一个",
@@ -15,5 +15,4 @@ var MessageEn = map[int]string{
 	AccountQueryUserError:      "查询用户失败",
 	AccountQueryUserParamError: "查询用户参数不正确",
 	AccountQueryUserListError:  "查询用户列表数据失败",
-
 }

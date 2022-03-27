@@ -1,10 +1,10 @@
 package response
 
 var MessageZHCN = map[int]string{
-	SuccessCode:  "ok",
-	FailCode:     "失败",
-	UnknownError: "未知错误",
+	SuccessCode: "ok",
+	FailCode:    "失败",
 
+	UnknownError: "未知错误",
 	PayloadError: "提交表单数据不正确",
 
 	AccountUserExistError:      "用户名已存在，请换一个",

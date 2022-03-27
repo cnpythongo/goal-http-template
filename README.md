@@ -11,26 +11,27 @@ HTTP API服务开发模板
 
 ## 本地开发准备工作：
 
-1. 将 .env.template文件 复制为 .env 文件;
-2. 修改 APP_ROUTER_SERVICE 配置，用于路由加载:
-    * api: 前台应用接口服务
-    * admin: 后台管理接口服务
-3. 按实际需要修改.env文件内的其他各项配置;
-
+1. 将 .env.template文件 复制为 .env.local 文件;
+2. 按实际需要修改.env文件内的其他各项配置;
 
 ## 运行本地开发服务:
+
+注意 GOAL_APP_SERVICE 环境变量，该变量值用于路由加载：
+
+    * admin: 后台管理系统API服务
+    * api: 前台站点API服务
 
 
 1. 启动前台API服务:
 
 ```shell script
-$ export GOAL_ENV_FILE=.env && go run main.go
+$ export GOAL_ENV_FILE=.env.local GOAL_APP_SERVICE=api && go run main.go
 ```
 
 2. 启动后台管理API服务:
 
 ```shell script
-$ export GOAL_ENV_FILE=.env && go run main.go
+$ export GOAL_ENV_FILE=.env.local GOAL_APP_SERVICE=admin && go run main.go
 ```
 
 ### Docker-compose快速启动
