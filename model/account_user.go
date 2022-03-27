@@ -2,7 +2,7 @@ package model
 
 import (
 	"github.com/cnpythongo/goal-tools/utils"
-	uuid "github.com/satori/go.uuid"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 	"strings"
 	"time"
@@ -12,7 +12,7 @@ import (
 
 type User struct {
 	basic.BaseModel
-	Uuid        string     `json:"uuid" gorm:"column:uuid;type:varchar(64);not null;unique;comment:唯一ID"`
+	UUID        string     `json:"uuid" gorm:"column:uuid;type:varchar(64);not null;unique;comment:唯一ID"`
 	Username    string     `json:"username" gorm:"column:username;type:varchar(256);unique;not null;comment:用户名"`
 	Password    string     `json:"-" gorm:"column:password;type:varchar(200);not null;comment:密码"`
 	Salt        string     `json:"salt" gorm:"column:salt;type:varchar(20);not null;comment:密码加盐"`
@@ -36,8 +36,8 @@ func (u *User) TableName() string {
 }
 
 func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
-	us := uuid.NewV4().String()
-	u.Uuid = strings.ReplaceAll(us, "-", "")
+	us := uuid.New().String()
+	u.UUID = strings.ReplaceAll(us, "-", "")
 	hashPwd, salt := utils.GeneratePassword(u.Password)
 	u.Password = hashPwd
 	u.Salt = salt
