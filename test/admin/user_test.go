@@ -2,23 +2,12 @@ package admin
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
+	"github.com/cnpythongo/goal/model"
+	"github.com/cnpythongo/goal/test/utils"
 	"github.com/go-playground/assert/v2"
 	"net/http"
 	"testing"
-
-	_ "github.com/cnpythongo/goal/config"
-
-	"github.com/cnpythongo/goal/model"
-	"github.com/cnpythongo/goal/router"
-	"github.com/cnpythongo/goal/test/utils"
 )
-
-func getRouter() *gin.Engine {
-	r := gin.New()
-	r = router.InitAdminRouters(r)
-	return r
-}
 
 func TestCreateUser(t *testing.T) {
 	payload := model.User{
@@ -27,7 +16,7 @@ func TestCreateUser(t *testing.T) {
 		Email:    "aaabbbddd@qq.com",
 		Avatar:   "http://www.qq.com/aaa.jpg",
 	}
-	r := getRouter()
+	r := GetRouter()
 	w := utils.DoRequest(r, "POST", "/api/account/users", payload)
 	assert.Equal(t, http.StatusOK, w.Code)
 
@@ -40,7 +29,7 @@ func TestCreateUser(t *testing.T) {
 }
 
 func TestGetUserByUuid(t *testing.T) {
-	r := getRouter()
+	r := GetRouter()
 	uid := "3610b2e5ab0a43c6b909eece0cb1c167"
 	w := utils.DoRequest(r, "GET", fmt.Sprintf("/api/users/%s", uid), nil)
 	assert.Equal(t, http.StatusOK, w.Code)

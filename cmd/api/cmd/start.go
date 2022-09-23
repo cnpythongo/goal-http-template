@@ -29,7 +29,7 @@ type Application struct {
 	cron       *cron.Cron
 }
 
-var cfgFile *string
+var CfgFile *string
 
 var startCmd = &cobra.Command{
 	Use:   "start",
@@ -47,12 +47,16 @@ var startCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(startCmd)
-	cfgFile = startCmd.Flags().StringP("config", "c", "", "api config file (required)")
+	CfgFile = startCmd.Flags().StringP("config", "c", "", "api config file (required)")
 	startCmd.MarkFlagRequired("config")
 }
 
+func (app *Application) GetGinEngine() *gin.Engine {
+	return app.ginEngine
+}
+
 func (app *Application) Init(_ svc.Environment) error {
-	cfg, err := config.Load(cfgFile)
+	cfg, err := config.Load(CfgFile)
 	if err != nil {
 		return err
 	}
