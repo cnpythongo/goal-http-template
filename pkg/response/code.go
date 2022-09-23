@@ -1,6 +1,8 @@
 package response
 
-import "os"
+import (
+	"github.com/cnpythongo/goal/pkg/common/config"
+)
 
 const (
 	SuccessCode = 0
@@ -24,10 +26,9 @@ var MsgMapping = map[string]map[int]string{
 	"zh_cn": MessageZHCN,
 }
 
-var Language = os.Getenv("LANGUAGE")
-
 func GetCodeMsg(code int) string {
-	mapping, ok := MsgMapping[Language]
+	lang := config.GetConfig().App.Language
+	mapping, ok := MsgMapping[lang]
 	if !ok {
 		return ""
 	}

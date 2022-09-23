@@ -1,9 +1,9 @@
 package admin
 
 import (
+	"github.com/cnpythongo/goal/model"
+	"github.com/cnpythongo/goal/pkg/common/log"
 	"github.com/facebookgo/inject"
-
-	"github.com/cnpythongo/goal/config"
 
 	"github.com/cnpythongo/goal/repository"
 	"github.com/cnpythongo/goal/service"
@@ -44,8 +44,8 @@ func InjectUserProfileController(injector inject.Graph) UserProfileController {
 func InjectLoginHistoryController(injector inject.Graph) LoginHistoryController {
 	var ctl LoginHistoryController
 	err := injector.Provide(
-		&inject.Object{Value: config.GlobalConfig.DB},
-		&inject.Object{Value: config.GlobalConfig.Logger},
+		&inject.Object{Value: model.GetDB()},
+		&inject.Object{Value: log.GetLogger()},
 		&inject.Object{Value: &repository.LoginHistoryRepository{}, Name: "LoginHistoryRepo"},
 		&inject.Object{Value: &service.LoginHistoryService{}, Name: "LoginHistorySvc"},
 		&inject.Object{Value: &ctl},
