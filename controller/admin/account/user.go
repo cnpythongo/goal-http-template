@@ -1,10 +1,10 @@
-package admin
+package account
 
 import (
 	"github.com/cnpythongo/goal-tools/utils"
-	"github.com/cnpythongo/goal/model"
+	account2 "github.com/cnpythongo/goal/model/account"
 	"github.com/cnpythongo/goal/pkg/response"
-	"github.com/cnpythongo/goal/service"
+	"github.com/cnpythongo/goal/service/account"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
@@ -32,11 +32,11 @@ type IUserController interface {
 
 type UserController struct {
 	Logger  *logrus.Logger       `inject:""`
-	UserSvc service.IUserService `inject:"UserSvc"`
+	UserSvc account.IUserService `inject:"UserSvc"`
 }
 
 func (u *UserController) CreateUser(c *gin.Context) {
-	payload := model.NewUser()
+	payload := account2.NewUser()
 	err := c.ShouldBindJSON(payload)
 	if err != nil {
 		response.FailJsonResp(c, response.PayloadError, nil)
