@@ -12,15 +12,11 @@ func MigrateTables(conf *config.Configuration) {
 		return
 	}
 	log.GetLogger().Infoln("migrate tables start .....")
-	err := model.GetDB().AutoMigrate(account.NewUser())
-	if err != nil {
-		panic(err)
-	}
-	err = model.GetDB().AutoMigrate(account.NewUserProfile())
-	if err != nil {
-		panic(err)
-	}
-	err = model.GetDB().AutoMigrate(account.NewLoginHistory())
+	err := model.GetDB().AutoMigrate(
+		account.NewUser(),
+		account.NewUserProfile(),
+		account.NewLoginHistory(),
+	)
 	if err != nil {
 		panic(err)
 	}
