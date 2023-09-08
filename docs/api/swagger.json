@@ -1,0 +1,11 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "前端应用接口文档",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost",
+    "basePath": "/api/v1",
+    "paths": {}
+}

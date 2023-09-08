@@ -6,6 +6,8 @@ import (
 	"github.com/cnpythongo/goal/router/middleware"
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func initDefaultRouter(cfg *config.Configuration) *gin.Engine {
@@ -25,5 +27,8 @@ func initDefaultRouter(cfg *config.Configuration) *gin.Engine {
 	}
 	// 最大运行上传文件大小
 	r.MaxMultipartMemory = cfg.Http.MaxMultipartMemory
+
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	return r
 }
